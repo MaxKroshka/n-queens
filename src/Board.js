@@ -79,19 +79,28 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
+      // grabs the index of that arrays, example 4x4
       var row = this.get(rowIndex);
+      // counter
       var counter = 0;
+      // iterate
       for( var i = 0; i < row.length; i++ ){
+        // if the value truth, value is greater 0, increment counter
         if(row[i]){counter++;}
       }
+      //if counter greater than 1, return true
       return counter > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+      // grab the array of 4 inner arrays
       var rows = this.rows();
+      // iterate
       for( var i = 0; i < rows.length; i++ ){
+        // call the each of the array elements
         if(this.hasRowConflictAt(i)){
+          // if returns true, there's a conflict
           return true;
         }
       }
@@ -105,25 +114,32 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+      // grab the arrays of element array, 4x4
       var rows = this.rows();
+      // counter
       var counter = 0; 
-
+      // iterate
       for ( var i = 0; i < rows.length; i++ ) {
+        // if go through the rows, checking each element in that array element
+        // if the value is 1
         if ( rows[i][colIndex] === 1 ) {
+          // increment counter
           counter++;
         }
       }
-
+      // if greater, it's true, there's a conflict
       return counter > 1; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      
+      // grab the arrays of element array, 4x4.      
       var rows = this.rows();
-
+      // iterate
       for ( var i = 0; i< rows.length; i++ ) {
+        // call this.hasColConflictAt(i)
         if ( this.hasColConflictAt(i) ) {
+          // if it returns true, there's a conflict
           return true;
         }
       }
@@ -138,13 +154,19 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      var rows = this.rows(); // fixme
+      // grab the array of elements of array
+      var rows = this.rows();
+      // counter
       var counter = 0;
+      // index that is being called
       var colIndex = majorDiagonalColumnIndexAtFirstRow;
-      for ( var i = 0; i < (rows.length - colIndex-1); i++ ) {
-        if ( !this._isInBounds(i, colIndex) ) {
+      // iterate
+      for ( var i = 0; i < (rows.length -1)*2; i++ ) {
+        //if out of bounds, skip it
+        if ( !this._isInBounds(i, colIndex+i) ) {
           continue;
         }
+        // 
         if ( rows[i][colIndex+i] === 1 ) {
           counter++;
         }
@@ -159,7 +181,7 @@
       var result = false;
       // call with negative number
       // add two t
-      for ( var i = -2; i < rows.length*2; i++ ) {
+      for ( var i = 0-rows.length; i < rows.length*2; i++ ) {
         if ( this.hasMajorDiagonalConflictAt(i) ) {
           result = true;
         }
