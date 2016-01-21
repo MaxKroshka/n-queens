@@ -140,8 +140,12 @@
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       var rows = this.rows(); // fixme
       var counter = 0;
-      for ( var i = 0; i < (rows.length - majorDiagonalColumnIndexAtFirstRow-1); i++ ) {
-        if ( rows[i][majorDiagonalColumnIndexAtFirstRow+i] === 1 ) {
+      var colIndex = majorDiagonalColumnIndexAtFirstRow;
+      for ( var i = 0; i < (rows.length - colIndex-1); i++ ) {
+        if ( !this._isInBounds(i, colIndex) ) {
+          continue;
+        }
+        if ( rows[i][colIndex+i] === 1 ) {
           counter++;
         }
       }
@@ -153,7 +157,9 @@
     hasAnyMajorDiagonalConflicts: function() {
       var rows = this.rows();
       var result = false;
-      for ( var i = 0; i< rows.length; i++ ) {
+      // call with negative number
+      // add two t
+      for ( var i = -2; i < rows.length*2; i++ ) {
         if ( this.hasMajorDiagonalConflictAt(i) ) {
           result = true;
         }
@@ -170,8 +176,18 @@
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
       var rows = this.rows();
       var counter = 0;
-      for ( var col = 0, row = 0; row > (rows.length - minorDiagonalColumnIndexAtFirstRow - 1); col--, row++) {
-        if ( rows[row][minorDiagonalColumnIndexAtFirstRow+col] === 1 ) {
+      var colIndex = minorDiagonalColumnIndexAtFirstRow;
+      // colIndex is the starter index = 5
+        // decrement colIndex by adding col. (position + negative);
+        //increment col 
+        //increment row
+
+      for ( var col = 0, row = 0; row < (rows.length - 1) * 2; col--, row++) {
+        if ( !this._isInBounds(row, colIndex+col) ) {
+          continue;
+        }
+
+        if ( rows[row][colIndex+col] === 1 ) {
           counter++;
         }
       }
@@ -183,7 +199,7 @@
     hasAnyMinorDiagonalConflicts: function() {
       var rows = this.rows();
       var result = false;
-      for ( var i = rows.length-1; i > 0; i-- ) {
+      for ( var i = (rows.length-1)*2; i > 0; i-- ) {
         if ( this.hasMinorDiagonalConflictAt(i) ) {
           result = true;
         }
